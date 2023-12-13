@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require("path");
 const mongoose = require("mongoose");
-require("dotenv").config({path : path.join(__dirname, '..' , 'config.env')});
+require("dotenv").config({ path: path.join(__dirname, '..', 'config.env') });
 
 
 const authRouter = require('./routes/auth');
@@ -13,8 +13,7 @@ const app = express();
 const PORT = process.env.PORT;
 const userName = process.env.DB_USERNAME;
 const password = encodeURIComponent(process.env.DB_PASSWORD);
-const DB = `mongodb+srv://${userName}:${password}@cluster0.fkliyeh.mongodb.net/flutterzon?retryWrites=true&w=majority`
-
+const DB = `mongodb+srv://khadetou:PU06TBw9wzWcP8CX@hotcodes.pflqn.mongodb.net/marcheSenegal?retryWrites=true&w=majority`
 
 // middleware
 app.use(express.json());
@@ -24,19 +23,19 @@ app.use(productRouter);
 app.use(userRouter);
 app.use(offersRouter);
 
-mongoose.connect(DB).then(()=>{
+mongoose.connect(DB).then(() => {
     console.log('Mongoose Connected!');
-}).catch((e)=>{
+}).catch((e) => {
     console.log(e);
 })
 
 
-app.get("/flutterzon" , (req, res) => {
+app.get("/flutterzon", (req, res) => {
     res.send("Welcome to Flutterzon!");
 })
 
-app.listen(PORT, "0.0.0.0",() => {
-    console.log(`Connected at PORT : ${PORT}`)
+app.listen(3000, "0.0.0.0", () => {
+    console.log(`Connected at PORT : ${3000}`);
 })
 
 module.exports = app;
