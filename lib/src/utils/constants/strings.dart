@@ -6,3 +6,5 @@ String uri = secureUri!;
 String signUpUrl = '$uri/api/signup';
 String signInUrl = '$uri/api/signin';
 String isTokenValidUrl = '$uri/IsTokenValid';
+
+String getUserDataUri = '$uri/';

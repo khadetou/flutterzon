@@ -1,0 +1,76 @@
+import 'dart:convert';
+
+import 'package:equatable/equatable.dart';
+
+import 'package:flutterzon/src/data/models/rating.dart';
+
+class Product extends Equatable {
+  final String name;
+  final String description;
+  final int quantity;
+  final List<String> images;
+  final String category;
+  final double price;
+  final String? id;
+  final List<Rating>? rating;
+
+  const Product({
+    required this.name,
+    required this.description,
+    required this.quantity,
+    required this.images,
+    required this.category,
+    required this.price,
+    this.id,
+    this.rating,
+  });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'description': description,
+      'quantity': quantity,
+      'images': images,
+      'category': category,
+      'price': price,
+      'id': id,
+      'rating': rating,
+    };
+  }
+
+  factory Product.fromMap(Map<String, dynamic> map) {
+    return Product(
+      name: map['name'] ?? '',
+      description: map['description'] ?? '',
+      quantity: map['quantity'] ?? '',
+      images: List<String>.from((map['images'] as List<String>)),
+      category: map['category'] ?? '',
+      price: map['price']?.toDouble() ?? 0.0,
+      id: map['_id'],
+      rating: map['rating'] != null
+          ? List<Rating>.from(
+              (map['ratings'])?.map<Rating?>(
+                (x) => Rating.fromMap(x),
+              ),
+            )
+          : null,
+    );
+  }
+
+  String toJson() => json.encode(toMap());
+
+  factory Product.fromJson(String source) =>
+      Product.fromMap(json.decode(source) as Map<String, dynamic>);
+
+  @override
+  List<Object?> get props => [
+        name,
+        description,
+        quantity,
+        images,
+        category,
+        price,
+        id,
+        rating,
+      ];
+}
