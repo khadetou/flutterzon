@@ -6,4 +6,6 @@ class AppRoute {
 
 class AppRouteConstants {
   static const splashScreen = AppRoute(name: 'splash-screen', path: '/');
+  static const authRoute = AppRoute(name: "auth-screen", path: "/auth-screen");
+  static const bottomBarRoute = AppRoute(name: 'bottomBar', path: '/bottomBar');
 }

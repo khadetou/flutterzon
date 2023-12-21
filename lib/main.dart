@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutterzon/src/config/router/router.dart';
 import 'package:flutterzon/src/config/themes/app_theme.dart';
+import 'package:flutterzon/src/data/repositories/auth_repository.dart';
 import 'package:flutterzon/src/logic/blocs/admin/admin_offers/single_image_coursel_cubic/single_image_carousel_cubic.dart';
+import 'package:flutterzon/src/logic/blocs/page_redirection_cubit/page_redirection_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -35,6 +37,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(
+          create: (context) => PageRedirectionCubit(AuthRepository()),
+        ),
         BlocProvider(
           create: (context) => SingleImageCubic(),
         ),
