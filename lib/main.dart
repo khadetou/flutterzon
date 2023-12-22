@@ -6,6 +6,7 @@ import 'package:flutterzon/src/config/router/router.dart';
 import 'package:flutterzon/src/config/themes/app_theme.dart';
 import 'package:flutterzon/src/data/repositories/auth_repository.dart';
 import 'package:flutterzon/src/logic/blocs/admin/admin_offers/single_image_coursel_cubic/single_image_carousel_cubic.dart';
+import 'package:flutterzon/src/logic/blocs/auth_bloc/radio_bloc/radio_bloc.dart';
 import 'package:flutterzon/src/logic/blocs/page_redirection_cubit/page_redirection_cubit.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
@@ -43,6 +44,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => SingleImageCubic(),
         ),
+        BlocProvider(
+          create: (context) => RadioBloc(),
+        )
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
