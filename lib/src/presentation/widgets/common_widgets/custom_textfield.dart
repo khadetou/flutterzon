@@ -1,10 +1,43 @@
 import 'package:flutter/material.dart';
 
 class CustomTextField extends StatelessWidget {
-  const CustomTextField({super.key});
+  final TextEditingController controller;
+  final String hintText;
+  final int maxLines;
+  final void Function(String)? onChanged;
+
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.hintText,
+    this.maxLines = 1,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: TextFormField(
+        controller: controller,
+        maxLines: maxLines,
+        onChanged: onChanged,
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: const TextStyle(
+            fontWeight: FontWeight.w400,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black38),
+          ),
+        ),
+        validator: (val) {
+          if (val == null || val.isEmpty) {
+            return 'This field cannot be empty';
+          }
+          return null;
+        },
+      ),
+    );
   }
 }
