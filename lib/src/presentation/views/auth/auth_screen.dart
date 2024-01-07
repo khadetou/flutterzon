@@ -352,11 +352,163 @@ class _AuthScreenState extends State<AuthScreen> {
                       return Column(
                         children: [
                           Container(
-                            child: Text(
-                                'Sign In'), // this is for the signIn proceed here !!!
+                            padding: const EdgeInsets.only(
+                              bottom: 10.0,
+                              right: 8,
+                              left: 8,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Constants.greyBackgroundColor,
+                              borderRadius: BorderRadius.circular(
+                                6,
+                              ),
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                ListTile(
+                                  minLeadingWidth: 2,
+                                  leading: SizedBox.square(
+                                    dimension: 12,
+                                    child: Radio(
+                                      value: Auth.signUp,
+                                      groupValue: state.auth,
+                                      onChanged: (Auth? val) {
+                                        context.read<RadioBloc>().add(
+                                              RadioChangedEvent(auth: val!),
+                                            );
+                                      },
+                                    ),
+                                  ),
+                                  title: RichText(
+                                    text: const TextSpan(
+                                      children: [
+                                        TextSpan(
+                                          text: 'Create Account. ',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 17.0,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                        TextSpan(
+                                          text: 'New to Amazon',
+                                          style: TextStyle(
+                                            fontSize: 13.0,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  onTap: () {
+                                    context.read<RadioBloc>().add(
+                                        const RadioChangedEvent(
+                                            auth: Auth.signUp));
+                                  },
+                                )
+                              ],
+                            ),
                           ),
                           Container(
-                            child: Text('form'),
+                            padding: const EdgeInsets.only(
+                                bottom: 10, right: 8, left: 8),
+                            decoration: BoxDecoration(
+                              color: Constants.greyBackgroundColor,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Column(
+                              children: <Widget>[
+                                ListTile(
+                                  minLeadingWidth: 2,
+                                  leading: SizedBox.square(
+                                    dimension: 12,
+                                    child: Radio(
+                                      value: Auth.signIn,
+                                      groupValue: state.auth,
+                                      onChanged: (Auth? val) {
+                                        context.read<RadioBloc>().add(
+                                              RadioChangedEvent(auth: val!),
+                                            );
+                                      },
+                                    ),
+                                  ),
+                                  title: RichText(
+                                    text: const TextSpan(children: [
+                                      TextSpan(
+                                        text: 'Sign In. ',
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 17.0,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      TextSpan(
+                                        text: 'Already a customer? ',
+                                        style: TextStyle(
+                                          fontSize: 13.0,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
+                                    ]),
+                                  ),
+                                  onTap: () {
+                                    context.read<RadioBloc>().add(
+                                          const RadioChangedEvent(
+                                            auth: Auth.signIn,
+                                          ),
+                                        );
+                                  },
+                                ),
+                                Form(
+                                  key: _signInFormKey,
+                                  child: Column(
+                                    children: <Widget>[
+                                      CustomTextField(
+                                        controller: _emailController,
+                                        hintText: 'Email',
+                                      ),
+                                      CustomTextField(
+                                        controller: _passwordController,
+                                        hintText: 'Password',
+                                      ),
+                                      BlocConsumer<AuthBloc, AuthState>(
+                                          builder: (context, state) {
+                                        if (state is AuthLoadingState) {
+                                          return const Center(
+                                            child: CircularProgressIndicator(),
+                                          );
+                                        } else {
+                                          return CustomElevatedButton(
+                                            buttonText: 'Continue',
+                                            onPressed: () {
+                                              if (_signInFormKey.currentState!
+                                                  .validate()) {
+                                                BlocProvider.of<AuthBloc>(
+                                                        context)
+                                                    .add(
+                                                  SignInPresentEvent(
+                                                    _emailController.text,
+                                                    _passwordController.text,
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          );
+                                        }
+                                      }, listener: (context, state) {
+                                        if (state is AuthErrorState) {
+                                          showSnackBar(
+                                              context, state.errorString);
+                                        }
+                                        if (state is SignInSuccessState) {
+                                          // BlocProvider.of<UserCubit>(context) Next create the userCubit Bloc
+                                        }
+                                      })
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
                           )
                         ],
                       );
