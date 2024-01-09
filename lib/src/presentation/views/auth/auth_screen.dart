@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutterzon/src/config/router/app_router_constants.dart';
 import 'package:flutterzon/src/logic/blocs/auth_bloc/auth_bloc.dart';
 import 'package:flutterzon/src/logic/blocs/auth_bloc/radio_bloc/radio_bloc.dart';
+import 'package:flutterzon/src/logic/blocs/user_cubit/user_cubit.dart';
 import 'package:flutterzon/src/presentation/widgets/common_widgets/custom_elevated_button.dart';
 import 'package:flutterzon/src/presentation/widgets/common_widgets/custom_textfield.dart';
 import 'package:flutterzon/src/utils/constants/constants.dart';
 import 'package:flutterzon/src/utils/utils.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -472,38 +475,53 @@ class _AuthScreenState extends State<AuthScreen> {
                                         hintText: 'Password',
                                       ),
                                       BlocConsumer<AuthBloc, AuthState>(
-                                          builder: (context, state) {
-                                        if (state is AuthLoadingState) {
-                                          return const Center(
-                                            child: CircularProgressIndicator(),
-                                          );
-                                        } else {
-                                          return CustomElevatedButton(
-                                            buttonText: 'Continue',
-                                            onPressed: () {
-                                              if (_signInFormKey.currentState!
-                                                  .validate()) {
-                                                BlocProvider.of<AuthBloc>(
-                                                        context)
-                                                    .add(
-                                                  SignInPresentEvent(
-                                                    _emailController.text,
-                                                    _passwordController.text,
-                                                  ),
-                                                );
-                                              }
-                                            },
-                                          );
-                                        }
-                                      }, listener: (context, state) {
-                                        if (state is AuthErrorState) {
-                                          showSnackBar(
-                                              context, state.errorString);
-                                        }
-                                        if (state is SignInSuccessState) {
-                                          // BlocProvider.of<UserCubit>(context) Next create the userCubit Bloc
-                                        }
-                                      })
+                                        builder: (context, state) {
+                                          if (state is AuthLoadingState) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          } else {
+                                            return CustomElevatedButton(
+                                              buttonText: 'Continue',
+                                              onPressed: () {
+                                                if (_signInFormKey.currentState!
+                                                    .validate()) {
+                                                  BlocProvider.of<AuthBloc>(
+                                                          context)
+                                                      .add(
+                                                    SignInPresentEvent(
+                                                      _emailController.text,
+                                                      _passwordController.text,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            );
+                                          }
+                                        },
+                                        listener: (context, state) {
+                                          if (state is AuthErrorState) {
+                                            showSnackBar(
+                                                context, state.errorString);
+                                          }
+                                          if (state is SignInSuccessState) {
+                                            BlocProvider.of<UserCubit>(context)
+                                                .getUserData();
+                                            if (state.user.type == 'user') {
+                                              context.goNamed(AppRouteConstants
+                                                  .bottomBarRoute.name);
+                                            } else {
+                                              context.goNamed(AppRouteConstants
+                                                  .adminBottomBarRoute.name);
+                                            }
+                                          }
+                                          if (state is UpdateUserData) {
+                                            BlocProvider.of<UserCubit>(context)
+                                                .setUser(state.user);
+                                          }
+                                        },
+                                      )
                                     ],
                                   ),
                                 )
@@ -516,12 +534,45 @@ class _AuthScreenState extends State<AuthScreen> {
                     return const SizedBox();
                   },
                 ),
+                const SizedBox.square(
+                  dimension: 20,
+                ),
+                Divider(
+                  color: Colors.grey.shade300,
+                  indent: 20,
+                  endIndent: 20,
+                  thickness: 0.5,
+                ),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    customTextButton(buttonText: 'Condition of use'),
+                    customTextButton(buttonText: 'Privacy Notice'),
+                    customTextButton(buttonText: 'Help'),
+                  ],
+                ),
                 const Center(
-                  child: Text('Auth  Screen'),
+                  child: Text(
+                    '© 1996-2024, Amazon.com, Inc. or its affiliates',
+                    style: TextStyle(fontSize: 12.0),
+                  ),
                 ),
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  TextButton customTextButton({String? buttonText}) {
+    return TextButton(
+      onPressed: () {},
+      child: Text(
+        buttonText!,
+        style: const TextStyle(
+          color: Color(0xFF1F72C5),
         ),
       ),
     );

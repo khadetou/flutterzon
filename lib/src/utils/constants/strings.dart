@@ -12,3 +12,4 @@ String fetchMyOrdersUri = '$uri/api/orders/me';
 String getAverageRatingLengthUri = '$uri/api/get-average-ratings-length';
 String getAverageRatingUri = '$uri/api/get-ratings-average';
 String getDealOfTheDayUri = '$uri/api/deal-of-the-day';
+String saveUserAddressUri = '$uri/api/save-user-address';
